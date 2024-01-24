@@ -5,11 +5,13 @@ import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 import { Table } from '@radix-ui/themes';
 import NextLink from 'next/link';
 import IssueActions from './IssueActions';
+import Pagination from '@/app/components/Pagination';
 
 interface SearchParams {
   status: Status;
   orderBy: keyof Issue;
-  dir?: 'desc';
+  dir: 'desc' | undefined;
+  page: string;
 }
 
 interface Props {
@@ -42,10 +44,19 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: dir }
     : undefined;
 
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
+  const where = { status };
+
   const issues = await prisma.issue.findMany({
-    where: { status },
+    where,
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
+
+  const issueCount = await prisma.issue.count({ where });
 
   const getQuery = (searchParams: SearchParams, column: IssueColumn) => {
     let query = { ...searchParams };
@@ -110,6 +121,13 @@ const IssuesPage = async ({ searchParams }: Props) => {
           ))}
         </Table.Body>
       </Table.Root>
+      <div className="mt-3">
+        <Pagination
+          pageSize={pageSize}
+          currentPage={page}
+          itemCount={issueCount}
+        />
+      </div>
     </div>
   );
 };
