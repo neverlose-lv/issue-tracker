@@ -30,7 +30,7 @@ const NavBar = () => {
   return (
     <nav className="border-b mb-5 px-5 py-3">
       <Container>
-        <Flex gap="5" justify="space-between">
+        <Flex gap="5" justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
               <AiFillBug />
