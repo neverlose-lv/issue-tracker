@@ -20,7 +20,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
   const assignIssue = (userId: string) => {
     axios
-      .patch('/Xapi/issues/' + issue.id, {
+      .patch('/api/issues/' + issue.id, {
         assignedToUserId: userId === unassignedValue ? null : userId,
       })
       .catch(() => {
