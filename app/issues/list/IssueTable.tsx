@@ -19,6 +19,10 @@ interface Props {
 }
 
 const IssueTable = ({ searchParams, issues }: Props) => {
+  if (issues.length === 0) {
+    return null;
+  }
+
   return (
     <Table.Root variant="surface">
       <Table.Header>
